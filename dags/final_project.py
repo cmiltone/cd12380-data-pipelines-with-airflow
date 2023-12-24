@@ -38,9 +38,9 @@ def final_project():
 
     load_songplays_table = LoadFactOperator(
         task_id='Load_songplays_fact_table',
-        create_sql = SqlQueries.create_sql,
-        insert_sql = SqlQueries.insert_sql,
-        truncate_sql = SqlQueries.truncate_sql,
+        create_sql = SqlQueries.songplay_create_sql,
+        insert_sql = SqlQueries.songplay_insert_sql,
+        truncate_sql = SqlQueries.songplay_truncate_sql,
     )
 
     load_user_dimension_table = LoadDimensionOperator(
@@ -75,5 +75,17 @@ def final_project():
         task_id='Run_data_quality_checks',
         checks = SqlQueries.checks
     )
+
+    end_operator = DummyOperator(task_id='End_execution')
+
+    start_operator >> stage_events_to_redshift
+    start_operator >> stage_songs_to_redshift
+    stage_songs_to_redshift >> load_songplays_table
+    stage_events_to_redshift >> load_songplays_table
+    load_songplays_table >> load_song_dimension_table >> run_quality_checks
+    load_songplays_table >> load_user_dimension_table >> run_quality_checks
+    load_songplays_table >> load_artist_dimension_table >> run_quality_checks
+    load_songplays_table >> load_time_dimension_table >> run_quality_checks
+    run_quality_checks >> end_operator
 
 final_project_dag = final_project()
