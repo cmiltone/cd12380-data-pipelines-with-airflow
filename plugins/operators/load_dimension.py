@@ -13,6 +13,7 @@ class LoadDimensionOperator(BaseOperator):
                  insert_mode='truncate-load', # allows switching between insert modes
                  truncate_sql = '',
                  insert_sql = '',
+                 create_sql = '',
                  *args, **kwargs):
 
         super(LoadDimensionOperator, self).__init__(*args, **kwargs)
@@ -20,12 +21,14 @@ class LoadDimensionOperator(BaseOperator):
             raise ValueError('{mode} is not a valid mode')
         self.redshift_conn_id = redshift_conn_id
         self.insert_mode = insert_mode
+        self.create_sql = create_sql
         self.inser_sql = insert_sql
         self.truncate_sql = truncate_sql
 
     def execute(self, context):
         hook = PostgresHook(self.redshift_conn_id)
+        hook.run(self.create_sql)
         if self.insert_mode == 'truncate_load':
             hook.run(self.truncate_sql)
-        hook.run(self.sql)
+        hook.run(self.inser_sql)
         self.log.info('Loaded Dimension data')

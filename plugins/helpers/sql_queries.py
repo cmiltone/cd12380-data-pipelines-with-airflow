@@ -1,7 +1,7 @@
 class SqlQueries:
     songplay_table_insert = ("""
         SELECT
-                md5(events.sessionid || events.start_time) songplay_id,
+                md5(events.sessionid || events.start_time) playid,
                 events.start_time, 
                 events.userid, 
                 events.level, 
@@ -96,7 +96,7 @@ class SqlQueries:
         table = 'staging_events',
         bucket = 's3://sparkify/log-data',
         region = 'us-east-1',
-        ref = 'auto',
+        ref = 's3://sparkify/log-metadata/log_json_path.json',
     )
 
     copy_songs_sql = copy_sql.format(
@@ -106,6 +106,17 @@ class SqlQueries:
         region = 'us-east-1',
         ref = 'auto',
     )
+
+    user_create_sql = ("""
+        CREATE TABLE IF NOT EXISTS users (
+            userid int4 NOT NULL,
+            first_name varchar(256),
+            last_name varchar(256),
+            gender varchar(256),
+            "level" varchar(256),
+            CONSTRAINT users_pkey PRIMARY KEY (userid)
+        );
+    """)
 
     user_insert_sql = ("""
         INSERT INTO users (userid, first_name, last_name, gender, level)
@@ -205,7 +216,7 @@ class SqlQueries:
     songplay_insert_sql = ("""
         INSERT INTO songplays (playid, start_time, userid, level, songid, artistid, sessionid, location, user_agent)
         SELECT
-                md5(events.sessionid || events.start_time) songplay_id,
+                md5(events.sessionid || events.start_time) AS playid,
                 events.start_time, 
                 events.userid, 
                 events.level, 

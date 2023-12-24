@@ -47,6 +47,7 @@ def final_project():
         task_id='Load_user_dim_table',
         truncate_sql = SqlQueries.user_truncate_sql,
         insert_sql = SqlQueries.user_insert_sql,
+        create_sql = SqlQueries.user_create_sql,
         insert_mode = 'truncate_load'
     )
 
@@ -54,6 +55,7 @@ def final_project():
         task_id='Load_song_dim_table',
         truncate_sql = SqlQueries.song_truncate_sql,
         insert_sql = SqlQueries.song_insert_sql,
+        create_sql = SqlQueries.song_create_sql,
         insert_mode = 'truncate_load'
     )
 
@@ -61,6 +63,7 @@ def final_project():
         task_id='Load_artist_dim_table',
         truncate_sql = SqlQueries.artist_truncate_sql,
         insert_sql = SqlQueries.artist_insert_sql,
+        create_sql = SqlQueries.artist_create_sql,
         insert_mode = 'truncate_load'
     )
 
@@ -68,6 +71,7 @@ def final_project():
         task_id='Load_time_dim_table',
         truncate_sql = SqlQueries.time_truncate_sql,
         insert_sql = SqlQueries.time_insert_sql,
+        create_sql = SqlQueries.time_create_sql,
         insert_mode = 'truncate_load'
     )
 

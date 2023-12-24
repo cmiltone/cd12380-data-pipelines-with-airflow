@@ -22,7 +22,7 @@ class DataQualityOperator(BaseOperator):
         failed_str2 = 'Data Quality Check failed for {}'
 
         for check in self.checks:
-            records = hook.get_records(check.query)
+            records = hook.get_records(check['query'])
             if len(records) < 1 or len(records[0])< 1:
                 raise ValueError(failed_str.format(check['query']))
             
