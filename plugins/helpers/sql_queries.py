@@ -93,16 +93,16 @@ class SqlQueries:
 
     copy_events_sql = copy_sql.format(
         create_sql = create_stage_events,
-        table = 'stage_events',
-        bucket = 's3://sparkify/log-data/',
+        table = 'staging_events',
+        bucket = 's3://sparkify/log-data',
         region = 'us-east-1',
         ref = 'auto',
     )
 
     copy_songs_sql = copy_sql.format(
         create_sql = create_stage_songs,
-        table = 'stage_songs',
-        bucket = 's3://sparkify/song-data/',
+        table = 'staging_songs',
+        bucket = 's3://sparkify/song-data',
         region = 'us-east-1',
         ref = 'auto',
     )
