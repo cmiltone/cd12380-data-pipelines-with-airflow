@@ -38,6 +38,9 @@ def final_project():
 
     load_songplays_table = LoadFactOperator(
         task_id='Load_songplays_fact_table',
+        create_sql = SqlQueries.create_sql,
+        insert_sql = SqlQueries.insert_sql,
+        truncate_sql = SqlQueries.truncate_sql,
     )
 
     load_user_dimension_table = LoadDimensionOperator(
