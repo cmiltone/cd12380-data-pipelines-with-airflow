@@ -48,7 +48,7 @@ def final_project():
         truncate_sql = SqlQueries.user_truncate_sql,
         insert_sql = SqlQueries.user_insert_sql,
         create_sql = SqlQueries.user_create_sql,
-        insert_mode = 'truncate_load'
+        insert_mode = 'truncate-load'
     )
 
     load_song_dimension_table = LoadDimensionOperator(
@@ -56,7 +56,7 @@ def final_project():
         truncate_sql = SqlQueries.song_truncate_sql,
         insert_sql = SqlQueries.song_insert_sql,
         create_sql = SqlQueries.song_create_sql,
-        insert_mode = 'truncate_load'
+        insert_mode = 'truncate-load'
     )
 
     load_artist_dimension_table = LoadDimensionOperator(
@@ -64,7 +64,7 @@ def final_project():
         truncate_sql = SqlQueries.artist_truncate_sql,
         insert_sql = SqlQueries.artist_insert_sql,
         create_sql = SqlQueries.artist_create_sql,
-        insert_mode = 'truncate_load'
+        insert_mode = 'truncate-load'
     )
 
     load_time_dimension_table = LoadDimensionOperator(
@@ -72,7 +72,7 @@ def final_project():
         truncate_sql = SqlQueries.time_truncate_sql,
         insert_sql = SqlQueries.time_insert_sql,
         create_sql = SqlQueries.time_create_sql,
-        insert_mode = 'truncate_load'
+        insert_mode = 'truncate-load'
     )
 
     run_quality_checks = DataQualityOperator(
