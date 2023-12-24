@@ -222,3 +222,22 @@ class SqlQueries:
                 AND events.artist = songs.artist_name
                 AND events.length = songs.duration
     """)
+
+    checks = [
+        {
+            'query': 'SELECT COUNT(*) FROM users where userid=NULL;',
+            'expected_result': 0
+        },
+        {
+            'query': 'SELECT COUNT(*) FROM songs where songid=NULL;',
+            'expected_result': 0
+        },
+        {
+            'query': 'SELECT COUNT(*) FROM artists where artistid=NULL;',
+            'expected_result': 0
+        },
+        {
+            'query': 'SELECT COUNT(*) FROM time where start_time=NULL;',
+            'expected_result': 0
+        }      
+    ]
