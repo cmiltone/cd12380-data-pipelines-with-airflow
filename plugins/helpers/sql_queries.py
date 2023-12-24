@@ -106,3 +106,79 @@ class SqlQueries:
         region = 'us-east-1',
         ref = 'auto',
     )
+
+    user_insert_sql = ("""
+        INSERT INTO users (userid, first_name, last_name, gender, level)
+        SELECT distinct userid, firstname, lastname, gender, level
+        FROM staging_events
+        WHERE page='NextSong'
+    """)
+
+    user_truncate_sql = ("""
+        TRUNCATE TABLE users;
+    """)
+    
+    song_create_sql = ("""
+        CREATE TABLE IF NOT EXISTS songs (
+            songid varchar(256) NOT NULL,
+            title varchar(512),
+            artistid varchar(256),
+            "year" int4,
+            duration numeric(18,0),
+            CONSTRAINT songs_pkey PRIMARY KEY (songid)
+        );
+    """)
+
+    song_truncate_sql = ("""
+        TRUNCATE TABLE songs;
+    """)
+    
+    song_insert_sql = ("""
+        INSERT INTO songs (songid, title, artistid, year, duration)
+        SELECT distinct song_id, title, artist_id, year, duration
+        FROM staging_songs
+    """)
+    
+    artist_create_sql = ("""
+        CREATE TABLE IF NOT EXISTS artists (
+            artistid varchar(256) NOT NULL,
+            name varchar(512),
+            location varchar(512),
+            latitude numeric(18,0),
+            longitude numeric(18,0)
+        );
+    """),
+
+    artist_truncate_sql = ("""
+        TRUNCATE TABLE artists;
+    """)
+
+    artist_insert_sql = ("""
+        INSERT INTO artists (artistid, name, location, latitude, longitude)
+        SELECT distinct artist_id, artist_name, artist_location, artist_latitude, artist_longitude
+        FROM staging_songs
+    """)
+
+    time_create_sql = ("""
+        CREATE TABLE IF NOT EXISTS "time" (
+            start_time timestamp NOT NULL,
+            "hour" int4,
+            "day" int4,
+            week int4,
+            "month" varchar(256),
+            "year" int4,
+            weekday varchar(256),
+            CONSTRAINT time_pkey PRIMARY KEY (start_time)
+        );
+    """)
+
+    time_truncate_sql = ("""
+        TRUNCATE TABLE "time";
+    """)
+
+    time_insert_sql = ("""
+        INSERT INTO time (start_time, hour, day, week, month, year, weekday)
+        SELECT start_time, extract(hour from start_time), extract(day from start_time), extract(week from start_time), 
+            extract(month from start_time), extract(year from start_time), extract(dayofweek from start_time)
+        FROM songplays;
+    """)
