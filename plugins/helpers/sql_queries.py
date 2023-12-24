@@ -85,7 +85,7 @@ class SqlQueries:
         COPY {table}
         FROM '{bucket}'
         ACCESS_KEY_ID '{{access}}'
-        SECRET_ACCESS_KEY '{{ksecret}}'
+        SECRET_ACCESS_KEY '{{secret}}'
         REGION '{region}'
         json
         '{ref}'

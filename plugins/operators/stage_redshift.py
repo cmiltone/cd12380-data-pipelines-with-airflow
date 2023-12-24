@@ -21,6 +21,9 @@ class StageToRedshiftOperator(BaseOperator):
     def execute(self, context):
         conn = MetastoreBackend().get_connection(self.aws_credentials)
         hook = PostgresHook(self.redshift_conn_id)
-        hook.run(self.sql.format(conn.login, conn.password))
+        hook.run(self.sql.format(
+            access = conn.login,
+            secret = conn.password
+        ))
 
         self.log.info('Data Staged To Redshift from S3')
