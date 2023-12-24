@@ -28,10 +28,12 @@ def final_project():
 
     stage_events_to_redshift = StageToRedshiftOperator(
         task_id='Stage_events',
+        sql = SqlQueries.copy_events_sql
     )
 
     stage_songs_to_redshift = StageToRedshiftOperator(
         task_id='Stage_songs',
+        sql = SqlQueries.copy_songs_sql
     )
 
     load_songplays_table = LoadFactOperator(

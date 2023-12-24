@@ -40,3 +40,69 @@ class SqlQueries:
                extract(month from start_time), extract(year from start_time), extract(dayofweek from start_time)
         FROM songplays
     """)
+
+    create_stage_events = ("""
+        CREATE TABLE IF NOT EXISTS staging_events (
+            artist varchar(256),
+            auth varchar(256),
+            firstname varchar(256),
+            gender varchar(256),
+            iteminsession int4,
+            lastname varchar(256),
+            length numeric(18,0),
+            "level" varchar(256),
+            location varchar(256),
+            "method" varchar(256),
+            page varchar(256),
+            registration numeric(18,0),
+            sessionid int4,
+            song varchar(256),
+            status int4,
+            ts int8,
+            useragent varchar(256),
+            userid int4
+        );
+    """)
+
+    create_stage_songs = ("""
+        CREATE TABLE IF NOT EXISTS staging_songs (
+                    num_songs int4,
+                    artist_id varchar(256),
+                    artist_name varchar(512),
+                    artist_latitude numeric(18,0),
+                    artist_longitude numeric(18,0),
+                    artist_location varchar(512),
+                    song_id varchar(256),
+                    title varchar(512),
+                    duration numeric(18,0),
+                    "year" int4
+                );
+    """)
+
+    copy_sql = ("""
+        {create_sql}
+        TRUNCATE TABLE {table};
+        COPY {table}
+        FROM '{bucket}'
+        ACCESS_KEY_ID '{{access}}'
+        SECRET_ACCESS_KEY '{{ksecret}}'
+        REGION '{region}'
+        json
+        '{ref}'
+    """)
+
+    copy_events_sql = copy_sql.format(
+        create_sql = create_stage_events,
+        table = 'stage_events',
+        bucket = 's3://sparkify/log-data/',
+        region = 'us-east-1',
+        ref = 'auto',
+    )
+
+    copy_songs_sql = copy_sql.format(
+        create_sql = create_stage_songs,
+        table = 'stage_songs',
+        bucket = 's3://sparkify/song-data/',
+        region = 'us-east-1',
+        ref = 'auto',
+    )
