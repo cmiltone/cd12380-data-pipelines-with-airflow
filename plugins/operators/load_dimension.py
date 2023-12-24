@@ -5,12 +5,12 @@ from airflow.utils.decorators import apply_defaults
 class LoadDimensionOperator(BaseOperator):
 
     ui_color = '#80BD9E'
-    allowed_modes = ('truncate-load', 'append-only')
+    allowed_modes = ('delete-load', 'append-only')
 
     @apply_defaults
     def __init__(self,
                  redshift_conn_id = 'redshift',
-                 insert_mode='truncate-load', # allows switching between insert modes
+                 insert_mode='delete-load', # allows switching between insert modes
                  truncate_sql = '',
                  insert_sql = '',
                  create_sql = '',
@@ -28,7 +28,7 @@ class LoadDimensionOperator(BaseOperator):
     def execute(self, context):
         hook = PostgresHook(self.redshift_conn_id)
         hook.run(self.create_sql)
-        if self.insert_mode == 'truncate-load':
+        if self.insert_mode == 'delete-load':
             hook.run(self.truncate_sql)
         hook.run(self.inser_sql)
         self.log.info('Loaded Dimension data')
